@@ -89,7 +89,7 @@ public:
     }
 
     void test_restarting_rest_resets_rest_time() {
-        worker->rest(10);
+        worker->rest(ConstructionWorker::MIN_REST_TIME);
         worker->go_work();
         worker->go_rest();
         TS_ASSERT_EQUALS(worker->minutes_rested(), 0);

@@ -22,6 +22,10 @@ public:
     unsigned bricks_laid() const;
     unsigned minutes_rested() const;
     State get_state() const;
+
+private:
+    State state;
+    unsigned counter;
 };
 
 #endif // CONSTRUCTIONWORKER_H
