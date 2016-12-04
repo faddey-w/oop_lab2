@@ -1,12 +1,15 @@
 #include <cxxtest/TestSuite.h>
 #include <memory>
-#include "../src/ConstructionWorker.h"
+#include "../src/ConstructionWorker.hpp"
+#include "../src/WorkState.h"
+#include "../src/RestState.h"
 
 
 #define ASSERT_EXPECTED_ERROR(expr, message) \
     TS_ASSERT_THROWS_EQUALS(expr, const std::runtime_error &e, e.what(), message)
 
 
+template<typename StateT>
 class ConstructionWorkerTestsBase : public CxxTest::TestSuite {
 protected:
     std::shared_ptr<ConstructionWorker> worker;
@@ -14,31 +17,14 @@ protected:
 public:
 
     virtual void setUp() {
-        worker.reset(new ConstructionWorker());
+        IWorkerState::Ptr state_ptr(new StateT);
+        worker.reset(new ConstructionWorker(state_ptr));
     }
 };
 
 
-class TestConstructionWorkerInitialState : public ConstructionWorkerTestsBase {
+class TestConstructionWorkerAtRest : public ConstructionWorkerTestsBase<RestState> {
 public:
-
-    void test_initial_state() {
-        TS_ASSERT_EQUALS(
-                worker->get_state(),
-                ConstructionWorker::State::WORK
-        );
-    }
-
-};
-
-
-class TestConstructionWorkerAtRest : public ConstructionWorkerTestsBase {
-public:
-
-    virtual void setUp() {
-        ConstructionWorkerTestsBase::setUp();
-        worker->go_rest();
-    }
 
     void test_state() {
         TS_ASSERT_EQUALS(
@@ -98,7 +84,7 @@ public:
 };
 
 
-class TestConstructionWorkerAtWork : public ConstructionWorkerTestsBase {
+class TestConstructionWorkerAtWork : public ConstructionWorkerTestsBase<WorkState> {
 public:
 
     void test_state() {

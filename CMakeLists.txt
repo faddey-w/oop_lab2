@@ -9,7 +9,6 @@ include_directories(libs)
 aux_source_directory(src SRC_LIST)
 add_executable(${PROJECT_NAME} ${SRC_LIST})
 
-
 find_package(CxxTest)
 set(CXXTEST_TESTGEN_INTERPRETER bash)
 set(TESTS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests)
